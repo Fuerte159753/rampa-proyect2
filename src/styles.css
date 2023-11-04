@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+/* Agrega la importación de Bootstrap Icons al archivo styles.css */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+body{
+    background-image: url('assets/background.png'); /* Ruta de tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    
+  }
+  *{
+    font-family: 'Poppins', sans-serif;
+  }

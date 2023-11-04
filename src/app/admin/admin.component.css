@@ -1,0 +1,14 @@
+.content{
+    position: fixed;
+    left: 40%;
+    top: 38%;
+}
+
+.content .text1{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 50px;
+}
+
+.offcanvas-title{
+    font-size: 25px;
+}

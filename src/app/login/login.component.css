@@ -1,0 +1,45 @@
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+}
+
+.password-toggle-btn i {
+    font-size: 1.2em;
+}
+.image-container {
+    position: relative;
+    text-align: center;
+  }
+
+  .image-container img {
+    margin-top: -80px; /* Ajusta la posición vertical de la imagen */
+  }
+    .card{
+    background: #173b70; 
+    border-radius: 25px;
+    }
+.text-white1{
+    cursor: pointer;
+    font-size: 9px;  
+    margin-left: 10px; 
+    text-align: right;
+    color: white;
+    text-decoration: none;
+}
+
+.text-white1:hover{
+    font-size: 10px;
+    transition: 1s;
+}
+
+.btn{
+    background: #F5A11C; 
+    color: white;
+}
+.btn:hover{
+    background: #b37614;
+}
