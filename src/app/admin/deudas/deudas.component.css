@@ -1,0 +1,31 @@
+.btadd{
+    text-decoration: none;
+}
+.btadd i{
+    position: fixed;
+    top: 12.5%;
+    right: 2.5%;
+    color: black;
+    font-size: 45px;
+}
+
+.btadd i:hover{
+    color: red;
+    font-size: 55px;
+    transition-duration: .1s;
+}
+.lista-desplegable {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: calc(100% - 2px); /* Ancho igual al input con un pequeño borde */
+    max-height: 200px; /* Altura máxima de la lista desplegable */
+    overflow-y: auto; /* Agregar barra de desplazamiento vertical si es necesario */
+  }
+  .lista-desplegable :hover {
+    cursor: pointer;
+  }
+  .buttondelete :hover{
+    cursor: pointer;
+  }

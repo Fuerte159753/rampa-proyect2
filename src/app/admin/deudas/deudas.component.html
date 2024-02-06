@@ -1,0 +1,205 @@
+<div class="infocli">
+    <h1>DEUDAS</h1>
+    <div class="container mt-5">
+        <div class="input-group" style="width: 50%; margin: 0 auto;">
+            <span class="input-group-text" id="basic-addon1">
+                <i class="bi bi-search" style="color:black; font-size: 24px;"></i>
+            </span>
+            <input type="text" class="form-control" placeholder="Busqueda" aria-label="Input group example" aria-describedby="basic-addon1">
+            <select  class="input-group-text">
+                <option value="nombre" selected>Cliente</option>
+                <option value="correo">Folio</option>
+            </select>
+        </div>
+    </div>
+<br>
+<table class="table">
+    <thead>
+      <tr>
+        <th style="text-align:center;">FOLIO</th>
+        <th style="text-align:center;">CLIENTE</th>
+        <th style="text-align:center;">Empresa</th>
+        <th style="text-align:center;">fecha inicio</th>
+        <th style="text-align:center;">Vencimiento</th>
+        <th style="text-align:center;">ADEUDO <i class="bi bi-info-circle"></i></th>
+        <th style="text-align:center;">RESTANTE <i class="bi bi-info-circle"></i></th>
+        <th style="text-align:center;">Estado</th>
+        <th style="text-align:center;">Notas</th>
+        <th style="text-align:center;">Referencia</th>
+        <th style="text-align:center;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let deuda of deudas" [ngClass]="{'liquidado': deuda.adeudo_restante == 0, 'pendiente': deuda.adeudo_restante > 0}">
+        <td>{{ deuda.folio | number }}</td>
+        <td>{{ deuda.nombre }}</td>
+        <td>{{ deuda.empresa }}</td>
+        <td>{{ deuda.fecha_inicio }}</td>
+        <td>{{ deuda.vencimiento }}</td>
+        <td>$ {{ deuda.adeudo | number }}</td>
+        <td>$ {{ deuda.adeudo_restante | number }}</td>
+        <td>
+          <p [ngClass]="{'text-success': deuda.adeudo_restante == 0, 'text-danger': deuda.adeudo_restante > 0}">
+            {{ deuda.adeudo_restante == 0 ? 'LIQUIDADO' : 'PENDIENTE' }}
+          </p>
+        </td>
+        <td><a href="" data-bs-toggle="modal" data-bs-target="#modalnotas" (click)="vernotas(deuda.folio)">Ver Notas</a></td>
+        <td><a href="{{deuda.referencia}}"><i class="bi bi-filetype-pdf"></i></a></td>
+        <td>
+            <a href="" data-bs-toggle="modal" data-bs-target="#historialmodal" (click)="verhistorial(deuda.folio)"><p>Historial</p></a>
+            <a href="" data-bs-toggle="modal" data-bs-target="#modaledit"><p>Editar</p></a>
+            <a id="buttondelete" class="buttondelete" (click)="eliminarDeuda(deuda.folio)">Eliminar</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal NOTAS -->
+<div class="modal fade" id="modalnotas" tabindex="-1" aria-labelledby="modalnotas" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel">NOTAS</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <!-- Verificar si el arreglo de notas está vacío -->
+            <ng-container *ngIf="notas.length > 0; else noNotas">
+              <li *ngFor="let nota of notas">
+                <p>Fecha: {{ nota.fecha }}</p>
+                <p>Nota: {{ nota.nota }}</p>
+                <hr>
+              </li>
+            </ng-container>
+            <!-- Mostrar mensaje de que no hay notas -->
+            <ng-template #noNotas>
+              <h4>No hay ninguna nota</h4>
+            </ng-template>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<a type="button" class="btadd" data-bs-toggle="modal" data-bs-target="#modalregistro" (click)="obtenerclientes()"><i class="bi bi-plus-circle-fill"></i></a>
+
+<!-- Nueva Deuda -->
+<div class="modal fade" id="modalregistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel">Nueva Deuda</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="nuevadeuda()">
+                <div class="mb-3">
+                  <label for="cliente" class="form-label">Cliente</label>
+                  <input type="text" id="cliente" name="cliente" class="form-control" placeholder="Escribe el nombre del cliente" [(ngModel)]="nombreClienteInput" (input)="filtrarClientes()" autocomplete="off">
+                  <ul *ngIf="mostrarListaClientes" class="lista-desplegable">
+                    <li *ngFor="let cliente of clientesFiltrados" (click)="seleccionarCliente(cliente)">{{ cliente.nombre }} {{ cliente.apellido }}</li>
+                  </ul>
+                </div>
+                <div class="mb-3">
+                  <label for="empresa" class="form-label">Empresa</label>
+                  <input type="text" id="empresa" name="empresa" class="form-control" [(ngModel)]="empresaInput" disabled>
+                </div>
+                <div class="mb-3">
+                  <label for="fechaini" class="form-label">Fecha de Inicio</label>
+                  <input type="date" id="fechaini" name="fechaini" class="form-control" [(ngModel)]="fechaInicioInput">
+                </div>
+                <div class="mb-3">
+                  <label for="fechavenci" class="form-label">Fecha de Vencimiento</label>
+                  <input type="date" id="fechavenci" name="fechavenci" class="form-control" [(ngModel)]="fechaVencimientoInput">
+                </div>
+                <div class="mb-3">
+                  <label for="monto" class="form-label">Monto</label>
+                  <input type="number" id="monto" name="monto" class="form-control" placeholder="Ingrese el monto" [(ngModel)]="montoInput">
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button id="closemodalagregar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editar Deuda -->
+  <div class="modal fade" id="modaledit" tabindex="-1" aria-labelledby="modaledit" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Editar Deuda</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <label for="editardeu">Editar Deuda</label>
+            <input type="checkbox" name="editardeu" id="editardeu">
+            <form (ngSubmit)="editardeuda()">
+              <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                <input type="text" id="cliente" name="cliente" class="form-control" placeholder="Escribe el nombre del cliente" [(ngModel)]="nombreClienteInput" (input)="filtrarClientes()" autocomplete="off">
+                <ul *ngIf="mostrarListaClientes" class="lista-desplegable">
+                  <li *ngFor="let cliente of clientesFiltrados" (click)="seleccionarCliente(cliente)">{{ cliente.nombre }} {{ cliente.apellido }}</li>
+                </ul>
+              </div>
+              <div class="mb-3">
+                <label for="empresa" class="form-label">Empresa</label>
+                <input type="text" id="empresa" name="empresa" class="form-control" [(ngModel)]="empresaInput" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="fechaini" class="form-label">Fecha de Inicio</label>
+                <input type="date" id="fechaini" name="fechaini" class="form-control" [(ngModel)]="fechaInicioInput">
+              </div>
+              <div class="mb-3">
+                <label for="fechavenci" class="form-label">Fecha de Vencimiento</label>
+                <input type="date" id="fechavenci" name="fechavenci" class="form-control" [(ngModel)]="fechaVencimientoInput">
+              </div>
+              <div class="mb-3">
+                <label for="monto" class="form-label">Monto</label>
+                <input type="number" id="monto" name="monto" class="form-control" placeholder="Ingrese el monto" [(ngModel)]="montoInput">
+              </div>
+              <button type="submit" class="btn btn-success">Enviar</button>
+            </form>
+          </div>
+        <div class="modal-footer">
+          <button id="closeEditModalButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Historial -->
+  <div class="modal fade" id="historialmodal" tabindex="-1" aria-labelledby="historialmodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">HISTORIAL DE PAGOS</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <ul>
+              <ng-container *ngIf="historial.length > 0; else noHIS">
+                <li *ngFor="let histori of historial">
+                  <p>Fecha: {{ histori.fecha_pago }}</p>
+                  <p>Nota: $ {{ histori.monto | number }}</p>
+                  <hr>
+                </li></ng-container>
+                <ng-template #noHIS>
+                  <h4>No hay historial de pagos que mostrar</h4>
+                </ng-template>
+            </ul>
+        </div>
+        <div class="modal-footer">
+          <button id="closeEditModalButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,180 @@
+    <div class="infocli">
+        <h1>Clientes</h1>
+        <div class="container mt-5">
+            <div class="input-group" style="width: 50%; margin: 0 auto;">
+                <span class="input-group-text" id="basic-addon1">
+                    <i class="bi bi-search" style="color:black; font-size: 24px;"></i>
+                </span>
+                <input [(ngModel)]="terminoBusqueda" (input)="realizarBusqueda()" type="text" class="form-control" placeholder="Busqueda" aria-label="Input group example" aria-describedby="basic-addon1">
+                <select [(ngModel)]="filtroBusqueda" class="input-group-text">
+                    <option value="nombre" selected>Nombre</option>
+                    <option value="correo">Correo</option>
+                    <option value="id">ID</option>
+                </select>
+            </div>
+        </div>
+    <br>
+    <table class="table">
+        <thead>
+          <tr>
+            <th style="text-align:center;">#</th>
+            <th style="text-align:center;">Nombre(s)</th>
+            <th style="text-align:center;">Apellido(s)</th>
+            <th style="text-align:center;">Correo</th>
+            <th style="text-align:center;">Contraseña</th>
+            <th style="text-align:center;">Telefono</th>
+            <th style="text-align:center;">Credencial</th>
+            <th style="text-align:center;">Comprobante de domicilio</th>
+            <th style="text-align:center;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientes">
+            <td style="text-align:center;">{{ cliente.id | number }}</td>
+            <td style="text-align:center;">{{ cliente.nombre }}</td>
+            <td style="text-align:center;">{{ cliente.apellido }}</td>
+            <td style="text-align:center;">{{ cliente.correo }}</td>
+            <td style="text-align:center;">{{ cliente.password }}</td>
+            <td style="text-align:center;">{{ cliente.telefono }}</td>
+            <td style="text-align: center; font-size: 25px;"><a href="#"><i class="bi bi-filetype-pdf"></i></a></td>
+            <td style="text-align: center; font-size: 25px;"><a href="#"><i class="bi bi-filetype-pdf"></i></a></td>
+            <td style="text-align:center;"> <!-- botones para editar-->
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button class="btn btn-warning" (click)="editcliente(cliente.id)" type="button" data-bs-toggle="modal" data-bs-target="#modaledit"><i class="bi bi-person-gear"></i>Editar</button>
+                    <button class="btn btn-danger" (click)="eliminarCliente(cliente.id)"><i class="bi bi-person-x"></i>Eliminar</button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- MODAL DE EDITAR CLIENTE-->
+<div class="modal fade" id="modaledit" tabindex="-1" aria-labelledby="modaledit" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Editar</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="submitEditForm()">
+                <div class="dvigrande">
+                    <label for="organizacion">Nombre De La Organizacion</label>
+                    <input type="text" name="organizacion" id="organizacion" [(ngModel)]="editOrganizacion">
+                </div>
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="name">Nombre: </label>
+                        <input type="text" name="name" id="name" [(ngModel)]="editName" required>
+                    </div>
+                    <div class="median1">
+                        <label for="apellido">Apellidos</label>
+                        <input type="text" name="apellido" id="apellido" [(ngModel)]="editApellido" required>
+                    </div>
+                </div>
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="mail" class="corr">Correo Electronico: </label>
+                        <input type="mail" name="mail" id="mail" [(ngModel)]="editMail" required>
+                    </div>
+                    <div class="median1">
+                        <label for="phone">Telefono</label>
+                        <input type="tel" name="phone" id="phone" [(ngModel)]="editPhone" required>
+                    </div>
+                </div>
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="password">contraseña: </label>
+                        <input type="password" name="password" id="password" [(ngModel)]="editPassword" required>
+                    </div>
+                    <div class="median1">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </form>
+          </div>
+        <div class="modal-footer">
+          <button id="closeEditModalButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- btn agregar cliente -->
+    <a type="button" class="btadd" data-bs-toggle="modal" data-bs-target="#modalregistro"><i class="bi bi-plus-circle-fill"></i></a>
+
+<!-- Modal -->
+<div class="modal fade" id="modalregistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nuevo Cliente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="submitForm()">
+                <div class="dvigrande">
+                    <label for="organizacion">Nombre De La Organizacion</label>
+                    <input type="text" name="organizacion" id="organizacion" [(ngModel)]="organizacion">
+                </div>
+
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="name">Nombre: </label>
+                        <input type="text" name="name" id="name" [(ngModel)]="name" required>
+                    </div>
+                    <div class="median1">
+                        <label for="apellido">Apellidos</label>
+                        <input type="text" name="apellido" id="apellido" [(ngModel)]="apellido" required>
+                    </div>
+                </div>
+
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="mail" class="corr">Correo Electronico: </label>
+                        <input type="mail" name="mail" id="mail" [(ngModel)]="mail" required>
+                    </div>
+                    <div class="median1">
+                        <label for="phone">Telefono</label>
+                        <input type="tel" name="phone" id="phone" [(ngModel)]="phone" required>
+                    </div>
+                </div>
+
+                <div class="dvimedianos">
+                    <div class="median1">
+                        <label for="password">contraseña: </label>
+                        <input type="password" name="password" id="password" [(ngModel)]="password" required>
+                    </div>
+                    <div class="median1">
+                    </div>
+                </div>
+
+                <div class="dvimini">
+                    <div class="dvi3min">
+                        <div class="mini">
+                            <label for="credencial">Credencial de Elector</label>
+                        </div>
+                        <div class="mini">
+                            <input type="file" name="credencial" id="credencial">
+                        </div>
+                    </div>
+                    <div class="dvi3min">
+                        <div class="mini">
+                            <label for="domicilio">Comprobante de Domicilio</label>
+                        </div>
+                        <div class="mini">
+                            <input type="file" name="domicilio" id="domicilio">
+                        </div>
+                    </div>
+                    <div class="dvi3min">
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </form>
+          </div>
+        <div class="modal-footer">
+          <button id="closeModalregistro" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

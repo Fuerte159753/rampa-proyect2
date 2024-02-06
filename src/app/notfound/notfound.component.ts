@@ -9,4 +9,8 @@ import { Router } from '@angular/router';
 export class NotfoundComponent {
   constructor(private router: Router){}
 
+  regre(){
+    window.location.href = '/login';
+  }
+
 }

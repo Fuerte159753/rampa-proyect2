@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router'; // Importa el módulo Router
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AppRoutingModule } from '../app-routing.module';
 
@@ -30,14 +30,14 @@ export class LoginComponent {
         console.log('Respuesta del servidor:', response);
         const tipeuser = response.tipeuser;
         if (tipeuser == 0) {
-          // Redireccionar a la página del administrador
+          //página del administrador
           this.router.navigate(['/admin'])
           //window.location.href = '/admin';
         } else if (tipeuser == 1) {
-          // Redireccionar a la página del callcenter
+          //página del callcenter
           this.router.navigate(['/callcenter']);
         } else if (tipeuser == 2) {
-          // Redireccionar a la página del cliente
+          //página del cliente
           this.router.navigate(['/cliente']);
         } else {
           console.error('Tipo de usuario no válido:', tipeuser);
